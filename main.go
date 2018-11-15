@@ -23,18 +23,14 @@ package main
 
 import "C"
 import (
-	"bytes"
-	"compress/gzip"
 	"encoding/binary"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"math"
 	"math/rand"
 	"path/filepath"
 	"runtime"
 	"time"
-	"unsafe"
 
 	"github.com/massung/CHIP-8/chip8"
 	"github.com/sqweek/dialog"
@@ -211,7 +207,7 @@ func createWindow() {
 	Window.SetTitle("CHIP-8")
 
 	// load the icon and use it if found
-	setIcon()
+	//setIcon()
 
 	// desired screen format and access
 	format := sdl.PIXELFORMAT_RGB888
@@ -225,21 +221,21 @@ func createWindow() {
 }
 
 // setIcon unzips the Icon data and sets it on the window.
-func setIcon() {
-	if gz, err := gzip.NewReader(bytes.NewReader(Icon)); err == nil {
-		defer gz.Close()
-
-		// decompress all the bytes
-		if icon, err := ioutil.ReadAll(gz); err == nil {
-			rw := sdl.RWFromMem(unsafe.Pointer(&icon[0]), len(icon))
-
-			// read the bitmap data and create the icon surface
-			if surface, err := sdl.LoadBMPRW(rw, 1); err == nil {
-				Window.SetIcon(surface)
-			}
-		}
-	}
-}
+//func setIcon() {
+//	if gz, err := gzip.NewReader(bytes.NewReader(Icon)); err == nil {
+//		defer gz.Close()
+//
+//		// decompress all the bytes
+//		if icon, err := ioutil.ReadAll(gz); err == nil {
+//			rw := sdl.RWFromMem(unsafe.Pointer(&icon[0]), len(icon))
+//
+//			// read the bitmap data and create the icon surface
+//			if surface, err := sdl.LoadBMPRW(rw, 1); err == nil {
+//				Window.SetIcon(surface)
+//			}
+//		}
+//	}
+//}
 
 // initAudio initializes an audio device for the CHIP-8 virtual machine.
 func initAudio() {
@@ -302,7 +298,7 @@ func loadFont() {
 	mask := sdl.MapRGB(surface.Format, 255, 0, 255)
 
 	// set the mask color key
-	surface.SetColorKey(1, mask)
+	surface.SetColorKey(true, mask)
 
 	// create the texture
 	if Font, err = Renderer.CreateTextureFromSurface(surface); err != nil {
